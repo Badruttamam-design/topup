@@ -193,7 +193,7 @@
                     <h4 class="font-weight-bold m-0">825 UC</h4>
                 </div>
                 <p><strong>IDR 190.000</strong></p>
-                <a href="javascript:void(0);" class="btn btn-outline-primary mr-4" data-jumlah="825 UC" data-harga="190.000<" onclick="setTransactionData(this)">Buy Now</a>
+                <a href="javascript:void(0);" class="btn btn-outline-primary mr-4" data-jumlah="825 UC" data-harga="190.000" onclick="setTransactionData(this)">Buy Now</a>
             </div>
             <div class="col-lg-4 col-md-6 text-center mb-5 wow fadeInDown" data-wow-delay="18s" style="background-color: #fffdfd; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgb(0, 255, 200);">
                 <div class="d-flex align-items-center justify-content-center mb-4">
@@ -209,7 +209,7 @@
                     <h4 class="font-weight-bold m-0">1100 UC</h4>
                 </div>
                 <p><strong>IDR 235.000</strong></p>
-                <a href="javascript:void(0);" class="btn btn-outline-primary mr-4" data-jumlah="1100 UC" data-harga="235.000<" onclick="setTransactionData(this)">Buy Now</a>
+                <a href="javascript:void(0);" class="btn btn-outline-primary mr-4" data-jumlah="1100 UC" data-harga="235.000" onclick="setTransactionData(this)">Buy Now</a>
             </div>
             <div class="col-lg-4 col-md-6 text-center mb-5 wow fadeInDown" data-wow-delay="20s" style="background-color: #fffdfd; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgb(0, 255, 200);">
                 <div class="d-flex align-items-center justify-content-center mb-4">
@@ -297,7 +297,7 @@
 <!-- Daftar Harga UC End -->
 
 <!-- form transaksi -->
-<div class="container-fluid py-5wow fadeInUp" data-wow-delay="0.1s" id="contact">
+<div class="container-fluid py-5 wow fadeInUp" data-wow-delay="0.1s" id="contact">
     <div class="container">
         <div class="position-relative d-flex align-items-center justify-content-center">
             <h1 class="display-1 text-uppercase text-white" style="-webkit-text-stroke: 1px #dee2e6;">Transaksi</h1>
@@ -316,9 +316,9 @@
                                 <p class="help-block text-danger" id="error-name"></p>
                             </div>
                             <div class="control-group col-sm-6">
-                                <h6>Jumlah UC</h6>
-                                <input type="text" class="form-control p-4" id="jumlah" placeholder="Jumlah UC"
-                                    required="required" data-validation-required-message="Please enter Jumlah UC" readonly/>
+                                <h6>Jumlah Diamond</h6>
+                                <input type="text" class="form-control p-4" id="jumlah" placeholder="Jumlah Diamond"
+                                    required="required" data-validation-required-message="Please enter Jumlah Diamond" readonly/>
                                 <p class="help-block text-danger" id="error-jumlah"></p>
                             </div>
                         </div>
@@ -328,6 +328,38 @@
                                 required="required" data-validation-required-message="Please enter Harga" readonly/>
                             <p class="help-block text-danger" id="error-harga"></p>
                         </div>
+
+                        <!-- Dropdown metode pembayaran -->
+                        <div class="control-group">
+                            <h6>Pilih Metode Pembayaran</h6>
+                            <select class="form-control col-sm-12" id="paymentMethod" required >
+                                <option value="" disabled selected>Pilih Metode Pembayaran</option>
+                                <option value="emaal" style="color: rgb(1, 197, 106);">Emaal</option>
+                                <option value="dana" style="color: rgb(4, 136, 245);">Dana</option>
+                                <option value="shopee" style="color: rgb(255, 81, 0);">Shopee</option>
+                            </select>
+                            <p class="help-block text-danger" id="error-payment-method"></p>
+                        </div>
+
+                        <!-- Gambar dan informasi rekening berdasarkan metode pembayaran -->
+                        <div id="paymentDetails" style="display:none; margin-top: 10px;">
+                            <div id="emallDetails" style="display:none;">
+                                <p>Silakan melakukan pembayaran ke nomor rekening <b><span style="color: rgb(1, 197, 106);">Emaal</span></b></p>
+                                <img src="img/emaal.png" alt="Emaal" style="width: 100px; height: auto;">
+                                <p style="color: rgb(1, 197, 106); font-weight: bold;">1158100656</p>
+                            </div>
+                            <div id="danaDetails" style="display:none;">
+                                <p>Silakan melakukan pembayaran ke nomor rekening <b><span style="color: rgb(4, 136, 245);">Dana</span></b></p>
+                                <img src="img/dana.png" alt="Dana" style="width: 100px; height: auto;">
+                                <p style="color: rgb(4, 136, 245); font-weight: bold;">082142675929</p>
+                            </div>
+                            <div id="shopeeDetails" style="display:none;">
+                                <p>Silakan melakukan pembayaran ke nomor rekening <b><span style="color: rgb(255, 81, 0);">Shopee</span></b></p>
+                                <img src="img/shopee.png" alt="Shopee" style="width: 100px; height: auto;">
+                                <p style="color: rgb(255, 81, 0); font-weight: bold;">082142675929</p>
+                            </div>
+                        </div>
+
                         <button class="btn btn-outline-primary" type="button" id="sendMessageButton" disabled>Send Message</button>
                     </form>
                 </div>
@@ -405,9 +437,10 @@
         var idGame = document.getElementById('name').value;
         var jumlahDiamond = document.getElementById('jumlah').value;
         var harga = document.getElementById('harga').value;
+        var metode = document.getElementById('paymentMethod').value;
         
         // Validasi form: Jika semua input sudah diisi, aktifkan tombol Send Message
-        if (idGame && jumlahDiamond && harga) {
+        if (idGame && jumlahDiamond && harga && metode) {
             document.getElementById('sendMessageButton').disabled = false;
         } else {
             document.getElementById('sendMessageButton').disabled = true;
@@ -424,6 +457,7 @@
         var idGame = document.getElementById('name').value;
         var jumlahDiamond = document.getElementById('jumlah').value;
         var harga = document.getElementById('harga').value;
+        var metode = document.getElementById('paymentMethod').value;
 
         // Validasi apakah ada field yang kosong
         if (!idGame) {
@@ -438,12 +472,17 @@
             document.getElementById('error-harga').innerText = "Harga harus diisi!";
             return;
         }
+        if (!metode) {
+            document.getElementById('error-harga').innerText = "Harus diisi!";
+            return;
+        }
 
         // Menyusun pesan yang ingin dikirim
         var message = "Assalamualaikum, saya ingin melakukan transaksi dengan detail berikut:\n";
         message += "ID Game: " + idGame + "\n";
-        message += "Jumlah UC: " + jumlahDiamond + "\n";
-        message += "Harga: " + harga;
+        message += "Jumlah Diamond: " + jumlahDiamond + "\n";
+        message += "Harga: " + harga + "\n";
+        message += "Bayar: " + metode;
 
         // Nomor WhatsApp yang ingin dihubungi (gunakan format internasional, tanpa tanda +)
         var phoneNumber = "6282142675929"; // Ganti dengan nomor WhatsApp kamu
@@ -472,6 +511,25 @@
                 document.getElementById('error-name').innerText = "";
             }
         });
+
+        // Fungsi untuk menampilkan informasi berdasarkan pilihan metode pembayaran
+    document.getElementById('paymentMethod').addEventListener('change', function() {
+        // Menyembunyikan semua detail sebelumnya
+        document.getElementById('paymentDetails').style.display = 'block';
+        document.getElementById('emallDetails').style.display = 'none';
+        document.getElementById('danaDetails').style.display = 'none';
+        document.getElementById('shopeeDetails').style.display = 'none';
+
+        // Menampilkan detail berdasarkan pilihan
+        const selectedPayment = this.value;
+        if (selectedPayment === 'emaal') {
+            document.getElementById('emallDetails').style.display = 'block';
+        } else if (selectedPayment === 'dana') {
+            document.getElementById('danaDetails').style.display = 'block';
+        } else if (selectedPayment === 'shopee') {
+            document.getElementById('shopeeDetails').style.display = 'block';
+        }
+    });
 </script>
       <!-- Menambahkan WOW.js -->
       <script src="wow/wow.js"></script>
